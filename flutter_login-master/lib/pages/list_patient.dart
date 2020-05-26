@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 
 import './patient_dashboard.dart';
+import '../services/flask_services.dart';
 
 bool isPatientsPresent = true;
 
 List<String> patientsName = ['Anil', 'Raj', 'Sachin', 'Rahul', 'Gaurav', 'Nikesh'];
 // List<String> patientsName = [];
+Future<dynamic> patName;
 class ListPatient extends StatefulWidget {
+
+  ListPatient() {
+    
+    FlaskServices.getPatients().then(
+      (value){
+        patName = value;
+      }
+      
+    );
+  }
 
   @override
   _ListPatientState createState() => _ListPatientState();

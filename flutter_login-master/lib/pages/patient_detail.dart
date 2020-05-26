@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
 
+import '../services/flask_services.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 class  PatientDetails extends StatelessWidget {
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController bloodGroupController = TextEditingController();
+  final TextEditingController factorDController = TextEditingController();
+  final TextEditingController factorAController = TextEditingController();
+
+  void _showAlertDialog(context) {
+    print('Alert');
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "Patient Data Successfully Stored!",
+      buttons: [
+        DialogButton(
+          child: Text("OK"), onPressed: () => Navigator.pop(context),
+          width: 120,
+        ),
+      ]
+    ).show();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +68,18 @@ class  PatientDetails extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
-                    obscureText: true,
-                    controller: passwordController,
+                    controller: phoneController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Phone number',
                     ),
                   ),
                 ),
+                
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
-                    obscureText: true,
-                    controller: passwordController,
+                    controller: bloodGroupController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Blood group',
@@ -68,7 +89,7 @@ class  PatientDetails extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
-                    controller: nameController,
+                    controller: factorDController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Factor Deficiency',
@@ -78,7 +99,7 @@ class  PatientDetails extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
-                    controller: nameController,
+                    controller: factorAController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Factor Assay',
@@ -97,7 +118,19 @@ class  PatientDetails extends StatelessWidget {
                       ),
                       onPressed: () {
                         print(nameController.text);
-                        print(passwordController.text);
+                        print(phoneController.text);
+                        print(bloodGroupController.text);
+                        print(factorDController.text);
+                        print(factorAController.text);
+                        FlaskServices.addPatient(
+                          nameController.text,
+                          phoneController.text,
+                          bloodGroupController.text,
+                          factorDController.text,
+                          factorAController.text
+                        );
+                        _showAlertDialog(context);
+                        
                       },
                     )),
 

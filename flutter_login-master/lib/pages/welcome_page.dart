@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 
 import './patient_detail.dart';
 import './about.dart';
-// import './fish.dart';
-// import './be.dart';
 import './list_patient.dart';
+
+// class WelcomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: MainScreen(),
+//     );
+//   }
+// }
 
 
 class MainScreen extends StatelessWidget {
@@ -72,50 +79,6 @@ class MainScreen extends StatelessWidget {
               ],
             )
           ),
-         
-          // Positioned(
-          //   top: 400,
-          //   left: 80,
-          //   child: Column(
-          //     children: <Widget>[
-          //       IconButton(
-          //         iconSize: 70,
-          //         icon: Image.asset('assets/blood.png', ),
-          //        onPressed: (){
-          //           Navigator.push(context, MaterialPageRoute(builder: (context) => Be()));
-          //        },
-          //       ),
-          //       Text(
-          //         'BE',
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       )
-          //     ],
-          //   )
-          // ),
-          // Positioned(
-          //   top: 400,
-          //   left: 200,
-          //   child: Column(
-          //     children: <Widget>[
-          //       IconButton(
-          //         iconSize: 70,
-          //         icon: Image.asset('assets/medical.png', ),
-          //         onPressed: (){
-          //           Navigator.push(context, MaterialPageRoute(builder: (context) => Fish()));
-          //         },
-          //       ),
-          //       Text(
-          //         'FISH',
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ],
-          //   )
-          // )
-
           Positioned(
             top: 400,
             left: 150,
