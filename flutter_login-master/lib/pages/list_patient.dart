@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import './patient_dashboard.dart';
 import '../services/flask_services.dart';
 
-bool isPatientsPresent = true;
+bool isPatientsPresent;
+bool isLoading = true;
 
-List<String> patientsName = ['Anil', 'Raj', 'Sachin', 'Rahul', 'Gaurav', 'Nikesh'];
-// List<String> patientsName = [];
-Future<dynamic> patName;
+List<dynamic> patName;
 class ListPatient extends StatefulWidget {
 
   ListPatient() {
-    
-    FlaskServices.getPatients().then(
-      (value){
-        patName = value;
-      }
-      
-    );
+    isLoading = true;
+    isPatientsPresent = false;
   }
 
   @override
@@ -26,16 +21,34 @@ class ListPatient extends StatefulWidget {
 
 class _ListPatientState extends State<ListPatient> {
 
-  Widget _buildPatientTile(index) {
+  _ListPatientState() {
 
+    FlaskServices.getPatients().then((value) {
+      patName = value;
+      _isPatientPopulated();
+      
+    });
+  }
+
+  void _isPatientPopulated() {
+    setState(() {
+      if(patName.length > 0){
+        isPatientsPresent = true;
+      }
+      isLoading = false;
+    });
+  }
+
+
+  Widget _buildPatientTile(index) {
     return GestureDetector(
           child: Container(
-        child: Column(
-          children: <Widget> [
+            child: Column(
+              children: <Widget> [
             
             ListTile(
               title: Text(
-                patientsName[index],
+                patName[index]['name'],
                 style: TextStyle(
                   fontSize: 20
                 ),
@@ -50,13 +63,21 @@ class _ListPatientState extends State<ListPatient> {
         )
         
       ),
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patientsName[index]))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patName[index]))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? Scaffold(
+      body: Center(
+        child: SpinKitDualRing(
+          color: Colors.greenAccent,
+          size: 80,
+        ), 
+      ),
+    ):
+    Scaffold(
       appBar: AppBar(
         title: Text('List of Patients'),
       ),
@@ -66,7 +87,7 @@ class _ListPatientState extends State<ListPatient> {
             height: 1000,
             child: ListView.builder(
             padding: EdgeInsets.all(10),
-            itemCount: patientsName.length,
+            itemCount: patName.length,
             itemBuilder: (context, index) {
               return _buildPatientTile(index);
             },

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/pages/patient_dashboard.dart';
+import 'package:flutter_login/services/flask_services.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 TextEditingController _date = TextEditingController();
 var now = DateTime.now();
@@ -15,6 +18,7 @@ String rtraumaValue;
 String rspontaneousValue;
 String rminorValue;
 String rmajorValue ;
+String patientId;
 
 RightKnee(this.rtraumaValue,this.rspontaneousValue,this.rmajorValue,this.rminorValue);
 
@@ -23,11 +27,48 @@ RightKnee(this.rtraumaValue,this.rspontaneousValue,this.rmajorValue,this.rminorV
  var rKnee = RightKnee("0","0","0","0");
 
 class Be extends StatefulWidget {
+
+  Be(id) {
+    patientId = id;
+  }
   @override
   _BeState createState() => _BeState();
 }
 
 class _BeState extends State<Be> {
+
+  void _confirmCall(context) {
+    print(patientId);
+    var requestBody = {
+      "lknee_trauma":traumaValue,
+      "lknee_spontaneous":spontaneousValue,
+      "lknee_minor":minorValue,
+      "lknee_major":majorValue,	
+      "rknee_trauma":rKnee.rtraumaValue,
+      "rknee_spontaneous":rKnee.rspontaneousValue,
+      "rknee_minor":rKnee.rminorValue,
+      "rknee_major":rKnee.rmajorValue,
+      "p_id":patientId,
+      "evaluation_date":_date.text
+    };
+    FlaskServices.addbeDetails(requestBody).then((value) {
+      if(value == 200) {
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "Data Added!",
+          buttons: [
+            DialogButton(
+          child: Text("OK"), onPressed: () => Navigator.pop(context),
+          width: 120,
+        ),
+          ],
+        ).show();
+      }
+    });
+
+  }
+
     Future _selectDate(context) async {
     var formatter = DateFormat('yyyy-MM-dd');
     DateTime picked = await showDatePicker(
@@ -506,12 +547,10 @@ Container(
                         child: Text('SAVE',
                           style: TextStyle(
                             color: Colors.white,
-                          )
-
-                          
+                          )                          
                         ),
                        
-                        onPressed: null
+                        onPressed: () =>_confirmCall(context),
                       ),
 
                     ),

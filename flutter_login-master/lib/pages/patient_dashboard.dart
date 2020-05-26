@@ -1,33 +1,154 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import './be.dart';
 import './fish.dart';
+import '../services/flask_services.dart';
 
 
 String patientName;
-String factorD = 'viii';
-String factorA = '<1';
+String patientId;
+String factorD;
+String factorA;
+
+bool isLoading;
+
+bool isBeDetails;
+bool isFishDetails;
+
+List beEvaluationDate;
+List fishEvaluationDate;
 
 // MediaQueryData queryData;
 
 class PatientDashboard extends StatefulWidget {
 
-  PatientDashboard(name) {
-    patientName = name;
+  PatientDashboard(map) {
+    beEvaluationDate = [];
+    isBeDetails = false;
+    isFishDetails = false;
+    isLoading = true;
+    patientName = map['name'];
+    patientId = map['id'].toString();
   }
   @override
   _PatientDashboardState createState() => _PatientDashboardState();
 }
 
 class _PatientDashboardState extends State<PatientDashboard> {
+
+  _PatientDashboardState() {
+    FlaskServices.getPatientDetails(patientId).then((value) {
+      addFactorDandADetails(value[0]['factor_deficiency'], value[0]['factor_assay'].toString());
+    });
+
+    FlaskServices.getPatientBeDetails(patientId).then((value) {
+      _addBeDateDetails(value);
+    });
+
+    FlaskServices.getPatientFishDetails(patientId).then((value) {
+      _addFishDateDetails(value);
+    });
+    
+  }
+
+  Widget _buildPatientTileBe(index) {
+    return GestureDetector(
+          child: Container(
+            child: Column(
+              children: <Widget> [
+            
+            ListTile(
+              title: Text(
+                beEvaluationDate[index]['evaluation_date'],
+                style: TextStyle(
+                  fontSize: 20
+                ),
+              ),
+            ),
+          
+            Divider(
+              color: Colors.green,
+            ),
+          ],
+          
+        )
+        
+      ),
+      // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patName[index]))),
+    );
+  }
+
+  Widget _buildPatientTileFish(index) {
+    return GestureDetector(
+          child: Container(
+            child: Column(
+              children: <Widget> [
+            
+            ListTile(
+              title: Text(
+                fishEvaluationDate[index]['evaluation_date'],
+                style: TextStyle(
+                  fontSize: 20
+                ),
+              ),
+            ),
+          
+            Divider(
+              color: Colors.green,
+            ),
+          ],
+          
+        )
+        
+      ),
+      // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patName[index]))),
+    );
+  }
+
+
+  void _addBeDateDetails(value) {
+    if(value!=null) {
+      setState(() {
+        beEvaluationDate = value;
+        isBeDetails = true;  
+      });
+    }
+
+  }
+
+  void _addFishDateDetails(value) {
+    if(value!=null) {
+      setState(() {
+        fishEvaluationDate = value;
+        isFishDetails = true;
+      });
+    }
+  }
+
+  void addFactorDandADetails(fd, fa) {
+    setState(() {
+      factorD = fd;
+      factorA = fa;
+
+      isLoading = false;
+    });
+  }
+
   double _screenWidth(context) {
-    // print(MediaQuery.of(context).size.width);
     
     return MediaQuery.of(context).size.width;
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading? Scaffold(
+      body: Center(
+        child: SpinKitDualRing(
+          color: Colors.greenAccent,
+          size: 80,
+        ), 
+      ),
+    ):Scaffold(
       appBar: AppBar(
         title: Text('Patient Dashboard'),
       ),
@@ -125,7 +246,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
                     child: IconButton(
                       icon: Image.asset('assets/blood.png',),
                       iconSize: 60,
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Be())),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Be(patientId))),
                     ),
                     ),
                   ),
@@ -166,33 +287,27 @@ class _PatientDashboardState extends State<PatientDashboard> {
                         children: <Widget>[
                           Expanded(
                             child: SingleChildScrollView(
-                              child: Column(
-                                children: <Widget>[
-                                  /* TODO: List View for date*/
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-
-                                ],
+                              child: isBeDetails ? Container(
+                                height: 300,
+                                child: ListView.builder(
+                                padding: EdgeInsets.all(10),
+                                itemCount: beEvaluationDate.length,
+                                itemBuilder: (context, index) {
+                                  return _buildPatientTileBe(index);
+                                },
                               ),
+                                
+                              ): Container(
+                                padding: EdgeInsets.all(55),
+                                child: Text(
+                                  'No Be Data Present!',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              
                             ),
                           ),
                         ],
@@ -209,33 +324,54 @@ class _PatientDashboardState extends State<PatientDashboard> {
                         children: <Widget>[
                           Expanded(
                             child: SingleChildScrollView(
-                              child: Column(
-                                children: <Widget>[
-                                  /* TODO: List View for date*/
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-                                  Text('hi', style: TextStyle(
-                                    fontSize: 50,
-                                  ),),
-
-                                ],
+                              child: isFishDetails ? Container(
+                                height: 300,
+                                child: ListView.builder(
+                                padding: EdgeInsets.all(10),
+                                itemCount: fishEvaluationDate.length,
+                                itemBuilder: (context, index) {
+                                  return _buildPatientTileFish(index);
+                                },
                               ),
+                                
+                              ): Container(
+                                padding: EdgeInsets.all(55),
+                                child: Text(
+                                  'No Fish Data Present!',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              
+                              // child: Column(
+                              //   children: <Widget>[
+                              //     /* TODO: List View for date*/
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+                              //     Text('hi', style: TextStyle(
+                              //       fontSize: 50,
+                              //     ),),
+
+                              //   ],
+                              // ),
                             ),
                           ),
                         ],

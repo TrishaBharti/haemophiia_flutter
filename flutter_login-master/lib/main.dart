@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/services/authentication.dart';
 import 'package:flutter_login/pages/root_page.dart';
 
+import './pages/list_patient.dart';
+
 void main() {
   runApp(new MyApp());
 }
@@ -34,5 +36,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: params['primarySwatch'],
         ),
         home: new RootPage(params: params, auth: new Auth()));
+        // home: ListPatient());
   }
 }
