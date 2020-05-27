@@ -70,7 +70,7 @@ def add_fish_details():
     
     return {'message':'Hello!'}, 200
 
-@fish_blueprint.route('/get-fish', methods=['GET'])
+@fish_blueprint.route('/get-fish', methods=['POST'])
 def get_fish_details():
     json_list = []
     try:

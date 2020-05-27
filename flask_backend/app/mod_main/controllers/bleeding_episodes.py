@@ -69,7 +69,7 @@ def add_bleeding_episodes():
     else:
         return {'message':'Bleeding episodes data sorted successfully', 'id':json_be_id}, 200
     
-@bleeding_episodes.route('/get-be', methods=['GET'])
+@bleeding_episodes.route('/get-be', methods=['POST'])
 def get_bleeding_episodes():
     
     json_list = []
