@@ -83,8 +83,9 @@ class _ListPatientState extends State<ListPatient> {
       ),
       body: SingleChildScrollView(
         child: isPatientsPresent ? 
-          Container(
-            height: 1000,
+        Container(
+          height: MediaQuery.of(context).size.height - 100,
+  
             child: ListView.builder(
             padding: EdgeInsets.all(10),
             itemCount: patName.length,
@@ -92,15 +93,15 @@ class _ListPatientState extends State<ListPatient> {
               return _buildPatientTile(index);
             },
           ),
-        ):Container(
-          padding: EdgeInsets.all(55),
-          child: Text(
-            'No Patient Data Present!',
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.grey,
+            ):Container(
+            padding: EdgeInsets.all(55),
+            child: Text(
+              'No Patient Data Present!',
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.grey,
+              ),
             ),
-          ),
         ),
 
       ),

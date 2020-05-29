@@ -4,6 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import './be.dart';
 import './fish.dart';
 import '../services/flask_services.dart';
+import '../pages/view_be_details.dart';
+import '../pages/view_fish_details.dart';
 
 
 String patientName;
@@ -75,7 +77,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
         )
         
       ),
-      // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patName[index]))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewBeDetails(beEvaluationDate[index]))),
     );
   }
 
@@ -102,7 +104,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
         )
         
       ),
-      // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PatientDashboard(patName[index]))),
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewFishDetails(fishEvaluationDate[index]))),
     );
   }
 
@@ -268,7 +270,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
                     child: IconButton(
                       icon: Image.asset('assets/medical.png',),
                       iconSize: 60,
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Fish())),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Fish(patientId))),
 
                     ),
                   ),
@@ -345,33 +347,7 @@ class _PatientDashboardState extends State<PatientDashboard> {
                                 ),
                               ),
                               
-                              // child: Column(
-                              //   children: <Widget>[
-                              //     /* TODO: List View for date*/
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-                              //     Text('hi', style: TextStyle(
-                              //       fontSize: 50,
-                              //     ),),
-
-                              //   ],
-                              // ),
+                              
                             ),
                           ),
                         ],

@@ -13,14 +13,14 @@ class FlaskServices{
       "factor_assay":factorA
     };
 
-    var response = await Requests.post("http://10.0.2.2:8080/v1/add-patient",
+    var response = await Requests.post("http://192.168.43.114:8080/v1/add-patient",
       bodyEncoding: RequestBodyEncoding.JSON,
       body: requestBody
     );
   }  
 
   static Future getPatients() async {
-    var response = await Requests.get("http://10.0.2.2:8080/v1/get-patient-details");
+    var response = await Requests.get("http://192.168.43.114:8080/v1/get-patient-details");
     String body = response.content();
     Map<String, dynamic> myMap = json.decode(body);
     List jsonData = myMap['data'];
@@ -29,7 +29,7 @@ class FlaskServices{
 
   static Future getPatientDetails(id) async {
     
-    var response = await Requests.get("http://10.0.2.2:8080/v1/get-patient-details-by-id/" + id);
+    var response = await Requests.get("http://192.168.43.114:8080/v1/get-patient-details-by-id/" + id);
     String body = response.content();
     Map<String, dynamic> myMap = json.decode(body);
     List jsonData = myMap['data'];
@@ -42,7 +42,7 @@ class FlaskServices{
       "request_type":"getbedetails",
 	    "p_id":id
     };
-    var response = await Requests.post("http://10.0.2.2:8080/v1/get-be",
+    var response = await Requests.post("http://192.168.43.114:8080/v1/get-be",
       body: requestBody,
       bodyEncoding: RequestBodyEncoding.JSON,
     );
@@ -63,7 +63,7 @@ class FlaskServices{
       "request_type":"getfishdetails",
 	    "p_id":id
     };
-    var response = await Requests.post("http://10.0.2.2:8080/v1/get-fish",
+    var response = await Requests.post("http://192.168.43.114:8080/v1/get-fish",
       body: requestBody,
       bodyEncoding: RequestBodyEncoding.JSON,
     );
@@ -81,13 +81,26 @@ class FlaskServices{
 
   static Future addbeDetails(requestBody) async {
 
-    var response = await Requests.post("http://10.0.2.2:8080/v1/add-be",
+    var response = await Requests.post("http://192.168.43.114:8080/v1/add-be",
       body: requestBody, 
       bodyEncoding: RequestBodyEncoding.JSON
     );
 
     var statusCode = response.statusCode;
     return statusCode;
+  }
+
+  static Future addFishDetails(requestBody) async {
+
+    var response = await Requests.post("http://192.168.43.114:8080/v1/add-fish",
+      body: requestBody, 
+      bodyEncoding: RequestBodyEncoding.JSON
+    );
+
+    var statusCode = response.statusCode;
+    return statusCode;
+
+
   }
 
 }

@@ -38,7 +38,7 @@ class Be extends StatefulWidget {
 class _BeState extends State<Be> {
 
   void _confirmCall(context) {
-    print(patientId);
+
     var requestBody = {
       "lknee_trauma":traumaValue,
       "lknee_spontaneous":spontaneousValue,
@@ -87,15 +87,19 @@ class _BeState extends State<Be> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      appBar: AppBar(title: Text('HEALTHCARE'),),
+      appBar: AppBar(title: Text('Bleeding Episodes'),),
       body: SingleChildScrollView(
               child: Container(
           
           child: Column(
             children: <Widget>[
               Text(
-                'BLEEDING EPISODES',
-                style: TextStyle(fontSize: 20.0,color: Colors.black),
+                'Score ranges from 1-4\n\n1. Unable to perform the activity\n2. Needs Partial aid to perform the activity\n3. Perform activity without aid with slight discomfort\n4. Able to perfrom activity',
+                style: TextStyle(
+                  fontSize: 17.0,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black
+                ),
               ),
               SizedBox(height: 10),
               Row(
@@ -537,9 +541,10 @@ Container(
                     Container(
                       height: 30,
                       width: 100,
-                      color: Colors.greenAccent,
+                      color: Colors.black,
                         
                       child: RaisedButton(
+                        color: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
 
@@ -555,7 +560,9 @@ Container(
 
                     ),
                    
-
+                    SizedBox(
+                      height: 10,
+                    ),
                   
                   ],
                 ),

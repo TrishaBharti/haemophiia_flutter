@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../services/flask_services.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 TextEditingController _date = TextEditingController();
 var now = DateTime.now();
+
+String patientId;
 
 class SelfCare{
 String groomingValue;
@@ -37,11 +42,56 @@ Locomotion(this.walkingValue,this.runningValue,this.stairValue);
  
 
 class Fish extends StatefulWidget {
+
+  Fish(id) {
+    patientId = id;
+
+  }
+
   @override
   _FishState createState() => _FishState();
 }
 
 class _FishState extends State<Fish> {
+
+  void _confirmCall(context) {
+    print(patientId);
+    var requestBody = {
+
+      "grooming":self.groomingValue,
+      "bathing":self.bathingValue,
+      "dressing":self.dressingValue,
+      "chair":trans.chairValue,
+      "squatting":trans.squattingValue,
+      "walking":loco.walkingValue,
+      "running":loco.runningValue,
+      "stairs":loco.stairValue,
+      "evaluation_date":_date.text,
+      "p_id":patientId
+    };
+
+    FlaskServices.addFishDetails(requestBody).then((value) {
+      if(value == 200) {
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "Data Added!",
+          buttons: [
+            DialogButton(
+          child: Text("OK"), onPressed: () {
+            Navigator.pop(context);
+            
+          },
+          width: 120,
+        ),
+          ],
+        ).show();
+      }
+    });
+
+  }
+
+
     Future _selectDate(context) async {
     var formatter = DateFormat('yyyy-MM-dd');
     DateTime picked = await showDatePicker(
@@ -60,15 +110,19 @@ class _FishState extends State<Fish> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      appBar: AppBar(title: Text('HEALTHCARE'),),
+      appBar: AppBar(title: Text('Functional Independance Score'),),
       body: SingleChildScrollView(
               child: Container(
           
           child: Column(
             children: <Widget>[
               Text(
-                'Functional Independance score in hemophilia',
-                style: TextStyle(fontSize: 17.0,fontWeight: FontWeight.bold,color: Colors.black),
+                'Score ranges from 1-4, depending on\ndegree of independence\n\n1. Unable to perform the activity\n2. Needs Partial aid to perform the activity\n3. Perform activity without aid with slight discomfort\n4. Able to perfrom activity',
+                style: TextStyle(
+                  fontSize: 17.0,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black
+                ),
               ),
               SizedBox(height: 10),
               Row(
@@ -246,7 +300,7 @@ class _FishState extends State<Fish> {
                                 isDense: true,
                                 onChanged: (String newValue) {
                                 setState(() {
-                                  self.bathingValue = newValue;
+                                  self.dressingValue = newValue;
                                 });
                             }
                             ),
@@ -534,20 +588,21 @@ class _FishState extends State<Fish> {
                   ],
                 ),
               ),
-              SizedBox(height: 20,),
-              Container(
-                child: Row(children: <Widget>[
-                  Text('Total Score')
-                ],)
-              ),
+              // SizedBox(height: 20,),
+              // Container(
+              //   child: Row(children: <Widget>[
+              //     Text('Total Score')
+              //   ],)
+              // ),
 
             SizedBox(height: 15),
                     Container(
                       height: 30,
                       width: 100,
-                      color: Colors.greenAccent,
+                      color: Colors.black,
                         
                       child: RaisedButton(
+                        color: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
 
@@ -560,13 +615,11 @@ class _FishState extends State<Fish> {
                           
                         ),
                        
-                        onPressed: null
+                        onPressed: () => _confirmCall(context),
                       ),
 
                     ),
-                   
-
-              
+                    SizedBox(height: 10),
             ],
           ),
         ),

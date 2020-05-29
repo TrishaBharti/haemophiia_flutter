@@ -30,12 +30,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        title: 'RVCE- Login Registration page',
-        debugShowCheckedModeBanner: true,
-        theme: new ThemeData(
-          primarySwatch: params['primarySwatch'],
-        ),
-        home: new RootPage(params: params, auth: new Auth()));
-        // home: ListPatient());
+      title: 'RVCE- Login Registration page',
+      debugShowCheckedModeBanner: true,
+      theme: new ThemeData(
+        primarySwatch: params['primarySwatch'],
+      ),
+      home: new RootPage(params: params, auth: new Auth())
+    );
   }
 }
